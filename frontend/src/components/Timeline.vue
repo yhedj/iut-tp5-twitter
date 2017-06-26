@@ -3,6 +3,7 @@
     <h1>{{ msg }}</h1>
     <ul>
     <li><router-link to="/timeline">Timeline</router-link></li>
+    <li v-for="tweet in tweets" >{{ tweet }}</li>
     </ul>
 
   </div>
@@ -13,7 +14,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      tweets: ['tweet 1', 'tweet 2', 'tweet 3']
     }
   }
 }
