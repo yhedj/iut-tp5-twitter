@@ -1,22 +1,21 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <ul>
-    <li v-for="tweet in tweets">
-      <tweet :tweet="tweet"/>
-    </li>
+    <h1 v-if ="loading">Chargement en cours...</h1>
+    <ul v-else>
+      <feed :tweets="tweets" :loading="loading"></feed>
     </ul>
   </div>
 </template>
 
 <script>
-import Tweet from './Tweet'
+import Feed from './Feed'
 import Vue from 'vue'
 import Resource from 'vue-resource'
 Vue.use(Resource)
 export default {
   name: 'timeline',
-  components: {Tweet},
+  components: {Feed},
   created () {
     this.fetchTweets()
   },
@@ -27,6 +26,7 @@ export default {
       this.$http.get('http://localhost:8080/list').then(response => {
         // get body data
         this.tweets = response.body
+        this.loading = false
       }, response => {
              // error callback
       })
@@ -36,11 +36,8 @@ export default {
   data () {
     return {
 
-      tweets: [
-        { auteur: 'Yamine', contenu: 'Salut' },
-        { auteur: 'Gaetan', contenu: 'Aiiiiight' },
-        { auteur: 'Olivier', contenu: 'Wesh' }
-      ]
+      tweets: [],
+      loading: true
 
     }
   }
