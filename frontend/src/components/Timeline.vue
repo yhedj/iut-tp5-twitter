@@ -2,21 +2,49 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <ul>
-    <li><router-link to="/timeline">Timeline</router-link></li>
-    <li v-for="tweet in tweets" >{{ tweet }}</li>
+    <li v-for="tweet in tweets">
+      <tweet :tweet="tweet"/>
+    </li>
     </ul>
-
   </div>
 </template>
 
 <script>
+import Tweet from './Tweet'
+import Vue from 'vue'
+import Resource from 'vue-resource'
+Vue.use(Resource)
 export default {
-  name: 'hello',
+  name: 'timeline',
+  components: {Tweet},
+  created () {
+    this.fetchTweets()
+  },
+  methods: {
+
+    fetchTweets: function () {
+           // GET /someUrl
+      this.$http.get('http://localhost:8080/list').then(response => {
+        // get body data
+        this.tweets = response.body
+      }, response => {
+             // error callback
+      })
+    }
+  },
+
   data () {
     return {
-      tweets: ['tweet 1', 'tweet 2', 'tweet 3']
+
+      tweets: [
+        { auteur: 'Yamine', contenu: 'Salut' },
+        { auteur: 'Gaetan', contenu: 'Aiiiiight' },
+        { auteur: 'Olivier', contenu: 'Wesh' }
+      ]
+
     }
   }
+
 }
 </script>
 
@@ -38,5 +66,14 @@ li {
 
 a {
   color: #42b983;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: block;
+  margin: 0 10px;
 }
 </style>
