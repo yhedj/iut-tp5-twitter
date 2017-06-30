@@ -1,9 +1,8 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+  <div class="timeline">
     <h1 v-if ="loading">Chargement en cours...</h1>
     <ul v-else>
-      <feed :tweets="tweets" :loading="loading"></feed>
+      <feed :tweets="tweets" :loading="loading" @retweeted="retweet"></feed>
     </ul>
   </div>
 </template>
@@ -13,6 +12,7 @@ import Feed from './Feed'
 import Vue from 'vue'
 import Resource from 'vue-resource'
 Vue.use(Resource)
+
 export default {
   name: 'timeline',
   components: {Feed},
@@ -20,6 +20,11 @@ export default {
     this.fetchTweets()
   },
   methods: {
+
+    retweet: function (id) {
+      var tweet = this.tweets.find(tweet => id === tweet.id)
+      tweet.retweeters.push({handle: 'jonhdoe'})
+    },
 
     fetchTweets: function () {
            // GET /someUrl
@@ -31,6 +36,7 @@ export default {
              // error callback
       })
     }
+
   },
 
   data () {
@@ -50,27 +56,8 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
 a {
   color: #42b983;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: block;
-  margin: 0 10px;
-}
 </style>
